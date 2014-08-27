@@ -13,6 +13,7 @@ using Phone.Models;
 
 namespace Phone.Controllers
 {
+    [RoutePrefix("api/CellPhones")]
     public class CellPhonesController : ApiController
     {
         private AppContext db = new AppContext();
@@ -24,10 +25,32 @@ namespace Phone.Controllers
         }
 
         // GET: api/CellPhones/5
+        [Route("{id:int:min(1)}/GetCellPhonesById")]
         [ResponseType(typeof(CellPhone))]
-        public async Task<IHttpActionResult> GetCellPhone(int id)
+        public async Task<IHttpActionResult> GetCellPhoneById(int id)
         {
             CellPhone cellPhone = await db.CellPhones.FindAsync(id);
+            if (cellPhone == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(cellPhone);
+        }
+
+        
+        // GET: api/CellPhones/HTC
+        /// <summary>
+        /// This action can't be reached because the first part of Routes is the same => get  GetCellPhonesById like GetCellPhonesByName
+        /// you can't access above action too because of same reason
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        [Route("{id:int:min(1)}/GetCellPhonesByName")]
+        [ResponseType(typeof(CellPhone))]
+        public async Task<IHttpActionResult> GetCellPhoneByName(string name)
+        {
+            CellPhone cellPhone = await db.CellPhones.FindAsync(name);
             if (cellPhone == null)
             {
                 return NotFound();
