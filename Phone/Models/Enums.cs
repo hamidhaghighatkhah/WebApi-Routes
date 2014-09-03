@@ -8,7 +8,8 @@ namespace Phone.Models
         Irancell = 2,
         Mci = 4,
         Rightel = 8,
-        Taliya = 16
+        Taliya = 16,
+        Mobin=32
     }
     class program
     {
