@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Phone.Models;
@@ -38,7 +40,7 @@ namespace Phone.Controllers
             return Ok(cellPhone);
         }
 
-        
+
         // GET: api/CellPhones/HTC
         /// <summary>
         /// This action can't be reached because the first part of Routes is the same => get  GetCellPhonesById like GetCellPhonesByName
@@ -98,11 +100,30 @@ namespace Phone.Controllers
         [ResponseType(typeof(CellPhone))]
         public async Task<IHttpActionResult> PostCellPhone(CellPhone cellPhone)
         {
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                return BadRequest();
+            }
+            if (HttpContext.Current.Request.Files.Count > 0 &&
+                HttpContext.Current.Request.Files[0].ContentLength > 0)
+            {
+                HttpPostedFile fileData = HttpContext.Current.Request.Files[0];
+
+                string extention = Path.GetExtension(fileData.FileName);
+
+                if (string.Equals(".xls", extention) || string.Equals(".xlsx", extention))
+                {
+                    string temp_path = HttpContext.Current.Server.MapPath(
+                        string.Format("~/Images/{0}{1}", Guid.NewGuid(), extention));
+
+                    fileData.SaveAs(temp_path);
+                    cellPhone.ImageUrl = temp_path;
+                }
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
             db.CellPhones.Add(cellPhone);
             await db.SaveChangesAsync();
 
