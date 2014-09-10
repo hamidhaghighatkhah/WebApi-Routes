@@ -30,6 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Email">
+      <HintPath>..\packages\Aspose.Email.4.5.0\lib\net40\Aspose.Email.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.OCR">
+      <HintPath>..\packages\Aspose.OCR.2.0.0\lib\net45\Aspose.OCR.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.OMR">
+      <HintPath>..\packages\Aspose.OCR.2.0.0\lib\net45\Aspose.OMR.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -44,6 +53,9 @@
     <Compile Include="DateHelper.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
