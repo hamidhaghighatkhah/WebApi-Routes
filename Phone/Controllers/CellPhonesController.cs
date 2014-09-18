@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.UI;
 using Phone.Models;
 
 namespace Phone.Controllers
@@ -159,5 +160,50 @@ namespace Phone.Controllers
         {
             return db.CellPhones.Any(e => e.Id == id);
         }
+
+        // POST api/Users/Logos
+        //لوگوی کاربر
+        [Route("Logos")]
+        [ResponseType(typeof(IEnumerable<Pair>))]
+        public async Task<bool> PostLogosAsync()
+        {
+            if (Request.Content.IsMimeMultipartContent("form-data"))
+            {
+                string uploadPath = HttpContext.Current.Server.MapPath("~/uploads/UserLogos");
+
+                var streamProvider = new MultipartFormDataStreamProvider(uploadPath);
+
+                await Request.Content.ReadAsMultipartAsync(streamProvider);
+
+                List<Pair> messages = new List<Pair>();
+                foreach (var file in streamProvider.FileData)
+                {
+                    FileInfo fi = new FileInfo(file.LocalFileName);
+                    messages.Add(new Pair(fi.Name, file.Headers.ContentDisposition.FileName.Replace("\"", string.Empty)));
+                }
+
+                //if (true/*_biz.AddUserLogo(messages)*/)
+                //{
+                //    //return new OperationResult
+                //    //{
+                //    //    type = OperationResultType.Success,
+                //    //    value = messages
+                //    //};
+                //}
+                //return new OperationResult
+                //{
+                //    type = OperationResultType.NotAcceptable,
+                //    value = null
+                //};
+            }
+            //return new OperationResult
+            //{
+            //    type = OperationResultType.Unknown,
+            //    value = null
+            //};
+            return true;
+        }
+
+
     }
 }
